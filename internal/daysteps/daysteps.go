@@ -11,14 +11,12 @@ import (
 )
 
 type DaySteps struct {
-	// TODO: добавить поля
 	Steps    int
 	Duration time.Duration
 	personaldata.Personal
 }
 
 func (ds *DaySteps) Parse(datastring string) (err error) {
-	// TODO: реализовать функцию
 	strSplit := strings.Split(datastring, ",")
 	if len(strSplit) != 2 {
 		log.Println("длина слайса была равна 2, так как в строке данных у нас количество шагов и продолжительность.")
@@ -27,7 +25,7 @@ func (ds *DaySteps) Parse(datastring string) (err error) {
 
 	countSteps, err := strconv.Atoi(strSplit[0])
 	if err != nil {
-		return err
+		return fmt.Errorf("invalid steps format: %w", err)
 	}
 
 	if countSteps <= 0 {
@@ -39,7 +37,7 @@ func (ds *DaySteps) Parse(datastring string) (err error) {
 
 	t, err := time.ParseDuration(strSplit[1])
 	if err != nil {
-		return err
+		return fmt.Errorf("error when parse duration: %w", err)
 	}
 
 	if t <= 0 {
@@ -53,10 +51,7 @@ func (ds *DaySteps) Parse(datastring string) (err error) {
 }
 
 func (ds DaySteps) ActionInfo() (string, error) {
-	// TODO: реализовать функцию
-
 	if ds.Steps <= 0 || ds.Duration <= 0 || ds.Weight <= 0 || ds.Height <= 0 {
-		fmt.Println("кол-во шагов или продолжительность или вес или высота равны или меньше нуля")
 		return "", fmt.Errorf("кол-во шагов или продолжительность или вес или высота равны или меньше нуля")
 	}
 
@@ -66,7 +61,7 @@ func (ds DaySteps) ActionInfo() (string, error) {
 	}
 	walkingSpentCalories, err := spentenergy.WalkingSpentCalories(ds.Steps, float64(ds.Weight), float64(ds.Height), ds.Duration)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error in walkingspentcalories: %w", err)
 	}
 
 	if walkingSpentCalories <= 0 {

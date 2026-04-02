@@ -23,7 +23,7 @@ func (t *Training) Parse(datastring string) (err error) {
 	}
 	countSteps, err := strconv.Atoi(strSplit[0])
 	if err != nil {
-		return err
+		return fmt.Errorf("invalid steps format: %w", err)
 	}
 
 	if countSteps <= 0 {
@@ -37,7 +37,7 @@ func (t *Training) Parse(datastring string) (err error) {
 
 	tm, err := time.ParseDuration(strSplit[2])
 	if err != nil {
-		return err
+		return fmt.Errorf("error when parse duration: %w", err)
 	}
 
 	if tm <= 0 {
@@ -49,7 +49,6 @@ func (t *Training) Parse(datastring string) (err error) {
 }
 
 func (t Training) ActionInfo() (string, error) {
-	// TODO: реализовать функцию
 	if t.Steps <= 0 {
 		return "", fmt.Errorf("кол-во шагов меньше или равно нулю")
 	}
@@ -79,12 +78,12 @@ func (t Training) ActionInfo() (string, error) {
 	category := t.TrainingType
 	walkingSpentCalories, err := spentenergy.WalkingSpentCalories(t.Steps, float64(t.Weight), float64(t.Height), t.Duration)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error in walkingspentcalories: %w", err)
 	}
 
 	runningSpentCalories, err := spentenergy.RunningSpentCalories(t.Steps, float64(t.Weight), float64(t.Height), t.Duration)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error in runningspentcalories: %w", err)
 	}
 
 	switch category {

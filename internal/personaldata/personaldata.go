@@ -9,6 +9,5 @@ type Personal struct {
 }
 
 func (p Personal) Print() {
-	// TODO: реализовать функцию
 	fmt.Printf("Имя: %s\nВес: %0.2f кг.\nРост: %0.2f м.\n", p.Name, p.Weight, p.Height)
 }
